@@ -5,7 +5,7 @@
         "adresse": "123 rue",
         "nbrChambres": 3,
         "nbrSDB": 2,
-        "surface": "30x40m²",
+        "surface": "30",
         "favori": true,
         "image": "pexels-binyamin-mellish-106399.png"
     },
@@ -15,7 +15,7 @@
         "adresse": "123 rue",
         "nbrChambres": 3,
         "nbrSDB": 2,
-        "surface": "30x40m²",
+        "surface": "30",
         "favori": true,
         "image": "pexels-binyamin-mellish-106399.png"
     },
@@ -25,7 +25,7 @@
         "adresse": "123 rue",
         "nbrChambres": 3,
         "nbrSDB": 2,
-        "surface": "30x40m²",
+        "surface": "30",
         "favori": true,
         "image": "pexels-binyamin-mellish-106399.png"
     }

@@ -1,21 +1,17 @@
 <script setup lang="ts">
 
-import { SchemaOffreMaison } from '@/types';
 import AfficheMaison from '@/components/AfficheMaison.vue';
-
 import { supabase } from "@/supabase";
-console.log("supabase :", supabase); // pour vérifier et "garder" supabase dans le code
-const maisons = []; // à remplacer par l'appel à Supabase
+console.log("supabase :", supabase); 
 
-const res = await fetch('/data.json')
-const tableauDeMaisons:SchemaOffreMaison[] = await res.json();
-
-
+const { data: lesMaisons, error } = await supabase.from('Maison').select('*')
 
 </script>
 
+
+
 <template>
         <div class="flex">
-                <AfficheMaison v-for="maison in tableauDeMaisons" v-bind="maison" :key="maison.id" />
+            <AfficheMaison v-for="maison in lesMaisons" v-bind="maison" />
         </div>
 </template>
