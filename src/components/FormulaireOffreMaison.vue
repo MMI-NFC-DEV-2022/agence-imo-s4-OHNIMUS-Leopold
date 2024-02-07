@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import AfficheMaison from './AfficheMaison.vue';
 import { supabase } from '@/supabase';
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+const route = useRoute('/maisons/edit/:id?')
 const router = useRouter()
 
 async function upsertMaison(dataForm, node) {
@@ -17,8 +19,18 @@ console.log({error,data});
 }
 
 
-
 const maison = ref({});
+
+
+if (route.params.id) {
+    // On charge les données de la maison
+    let { data, error } = await supabase
+    .from("Maison")
+    .select("*")
+    .eq("id", route.params.id);
+    if (error) console.log("n'a pas pu charger le table Maison :", error);
+    else maison.value = (data as any[])[0];
+}
 
 
 </script>
