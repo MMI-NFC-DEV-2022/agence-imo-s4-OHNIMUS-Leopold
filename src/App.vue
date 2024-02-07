@@ -11,6 +11,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/simple">Simple</RouterLink>
         <RouterLink to="/formkit">Formkit</RouterLink>
         <RouterLink to="/maisons">Index Maisons</RouterLink>
+        <RouterLink to="/auth">Auth</RouterLink>
       </nav>
     </div>
   </header>
