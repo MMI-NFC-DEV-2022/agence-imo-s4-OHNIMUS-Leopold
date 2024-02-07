@@ -1,8 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AfficheMaison from './AfficheMaison.vue';
+import { supabase } from '@/supabase';
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+async function upsertMaison(dataForm, node) {
+    const { data, error } = await supabase.from("Maison").upsert(dataForm).select();
+    if (error) node.setErrors([error.message])
+    else {
+console.log({error,data});
+
+        node.setErrors([]);
+        router.push({ name: "maisons-edit", params: { id: data[0].id } });
+    }
+}
+
+
 
 const maison = ref({});
+
+
 </script>
 
 <template>
@@ -15,6 +33,7 @@ const maison = ref({});
         </div>
         <div class="p-2">
             <FormKit type="form" v-model="maison" 
+            @submit="upsertMaison"
             :config="{
             classes: {
             input: 'p-1 rounded border-gray-300 shadow-sm border',
@@ -23,7 +42,7 @@ const maison = ref({});
             }"
             :submit-attrs="{ classes: { input: 'bg-red-300 p-1 rounded' } }">
                 <FormKit name="nomMaison" label="nom" />
-                <FormKit name="image" label="image" type="file" />
+                <FormKit name="image" label="image" />
                 <FormKit name="adresse" label="adresse" />
                 <FormKit name="prix" label="prix" type="number" />
                 <FormKit name="nbrSDB" label="Nombre de salles de bains" type="number" />
