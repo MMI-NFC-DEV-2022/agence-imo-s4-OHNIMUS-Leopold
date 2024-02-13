@@ -4,7 +4,7 @@ import AfficheMaison from '@/components/AfficheMaison.vue';
 import { supabase } from "@/supabase";
 console.log("supabase :", supabase); 
 
-const { data: lesMaisons, error } = await supabase.from('Maison').select('*')
+const { data: lesMaisons, error } = await supabase.from('Maison').select('*').order('id');
 
 </script>
 
