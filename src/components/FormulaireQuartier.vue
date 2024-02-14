@@ -1,42 +1,31 @@
-< setup lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue'
+import AfficheQuartier from './AfficheQuartier.vue';
 import { supabase } from '@/supabase';
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
-import { supabase } from '@/supabase';      
 const route = useRoute('/quartiers/edit/:id?')
 const router = useRouter()
-
-
-
-const route = useRoute('/quartiers/edit/:id?')
-const router = useRouter()
-
-const quartier = ref({});
-
-const communes = ref([]);
-
-async function fetchCommunes() {
-    const { data, error } = await supabase.from<Database>('Commune').select("*");
-    if (error) console.log("Erreur lors du chargement des communes :", error);
-    else communes.value = data;
-}
-
-fetchCommunes();
 
 async function upsertQuartier(dataForm, node) {
-    const { data, error } = await supabase.from<Database>('Quartier').upsert(dataForm).select();
+    const { data, error } = await supabase.from("Quartier").upsert(dataForm).select();
     if (error) node.setErrors([error.message])
     else {
-        console.log({error,data});
+console.log({error,data});
+
         node.setErrors([]);
         router.push({ name: "quartiers-edit", params: { id: data[0].id } });
     }
 }
 
+
+const quartier = ref({});
+
+
 if (route.params.id) {
+    // On charge les données de la maison
     let { data, error } = await supabase
-    .from<Database>('Quartier')
+    .from("Quartier")
     .select("*")
     .eq("id", route.params.id);
     if (error) console.log("n'a pas pu charger le table Quartier :", error);
@@ -44,22 +33,28 @@ if (route.params.id) {
 }
 
 
+const { data: listeCommune, error } = await supabase
+  .from("Commune")
+  .select("*");
+if (error) console.log("n'a pas pu charger la table Commune :", error);
+// Les convertir par `map` en un tableau d'objets {value, label} pour FormKit
+const optionsCommune = listeCommune?.map((commune) => ({
+  value: commune.id,
+  label: commune.nomCommune,
+}));
+
+
+
 </script>
-
-
 
 <template>
     <div>
-        <!-- Prévisualisation des données du quartier -->
         <div class="p-2">
             <h2 class="text-2xl">
                 Résultat (Prévisualisation)
             </h2>
-            {{ nomQuartier }}
-            {{ nomCommune }}
-            <!-- Assurez-vous d'avoir un composant pour afficher les détails du quartier -->
+            <AfficheQuartier v-bind="quartier" />
         </div>
-        <!-- Formulaire du quartier -->
         <div class="p-2">
             <FormKit type="form" v-model="quartier" 
             @submit="upsertQuartier"
@@ -70,14 +65,16 @@ if (route.params.id) {
             },
             }"
             :submit-attrs="{ classes: { input: 'bg-red-300 p-1 rounded' } }">
-                <FormKit name="nomQuartier" label="Nom du quartier" />
-                <!-- Champ de sélection pour la commune -->
-                <FormKit name="idCommune" label="Commune" type="select">
-                    <!-- Boucle à travers les communes pour peupler les options -->
-                    <option v-for="commune in communes" :key="commune.id" :value="commune.id">{{ commune.nomCommune }}</option>
+                <FormKit name="nomQuartier" label="nom" />
+                <!-- <FormKit name="idCommune" label="Commune" /> -->
+                <FormKit
+                    type="select"
+                    name="idCommune"
+                    label="Commune"
+                    :options="optionsCommune"
+                />
                 </FormKit>
-                <!-- Ajoutez d'autres champs nécessaires pour le quartier -->
-            </FormKit>
+            
         </div>
     </div>
 </template>

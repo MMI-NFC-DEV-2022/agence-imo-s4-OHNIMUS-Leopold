@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { supabase } from "../../supabase";
 const { data, error } = await supabase.from('quartiercommune').select('*').order('nomCommune');
-if (error) console.log("n'a pas pu charger la table quartiercommune :", error);
+if (error) console.log("n'a pas pu charger la view quartiercommune :", error);
 
 </script>
 
@@ -22,7 +22,7 @@ if (error) console.log("n'a pas pu charger la table quartiercommune :", error);
       v=>v.nomCommune  )">
         {{ nomCommune }}
         <p class="ml-5" v-for="quartierObject in listeQuartiers">
-          <RouterLink :to="{ name:'quartiers-edit', params:{id:quartierObject.id} }">{{ quartierObject.nomQuartier }}</RouterLink>
+          <RouterLink :to="{ name:'quartiers-edit', params:{id:quartierObject.idQuartier} }">{{ quartierObject.nomQuartier }}</RouterLink>
         </p>
       </li>
     </ul>
