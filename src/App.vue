@@ -20,6 +20,6 @@ import { RouterLink, RouterView } from 'vue-router'
   </header>
 
   <Suspense>
-    <RouterView />
+    <RouterView :key="$router.params" />
   </Suspense>
 </template>
