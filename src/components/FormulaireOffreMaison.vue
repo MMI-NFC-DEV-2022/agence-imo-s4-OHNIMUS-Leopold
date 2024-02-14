@@ -7,6 +7,10 @@ import { useRoute } from 'vue-router'
 const route = useRoute('/maisons/edit/:id?')
 const router = useRouter()
 
+const { data, error } = await supabase.from('quartiercommune').select('*').order('nomCommune');
+if (error) console.log("n'a pas pu charger la view quartiercommune :", error);
+
+
 async function upsertMaison(dataForm, node) {
     const { data, error } = await supabase.from("Maison").upsert(dataForm).select();
     if (error) node.setErrors([error.message])
@@ -61,7 +65,25 @@ if (route.params.id) {
                 <FormKit name="nbrChambres" label="Nombre de chambres" type="number" />
                 <FormKit name="surface" label="Surface" type="number" />
                 <FormKit name="favori" label="Mettre en valeur" type="checkbox" wrapper-class="flex" />
+                <FormKit type="select" name="idQuartier" id="">
+                    <option value="" :disabled="true">Choisir un quartier...</option>
+                    <optgroup v-for="(listeQuartiers, nomCommune) in Object
+                        //@ts-ignore
+                        .groupBy( data, 
+                        //@ts-ignore
+                        v=>v.nomCommune  )" :label=nomCommune>
+                    >
+                        <option class="ml-5" v-for="quartierObject in listeQuartiers" :value=quartierObject.idQuartier>{{ quartierObject.nomQuartier }}   </option>
+                    </optgroup>
+                </FormKit>
+                
             </FormKit>
+
+
+
+
+            
+
         </div>
     </div>
 </template>

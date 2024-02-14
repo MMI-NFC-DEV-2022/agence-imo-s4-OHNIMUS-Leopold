@@ -4,8 +4,35 @@ import Icon1 from '@/components/icons/Icon-1.vue';
 import Icon2 from '@/components/icons/Icon-2.vue';
 import Icon3 from '@/components/icons/Icon-3.vue';
 import { defineProps } from 'vue';
-import { SchemaOffreMaison } from '@/types';
- defineProps<SchemaOffreMaison>()
+import { ref } from 'vue';
+import { supabase } from '@/supabase';
+import { type Database } from '@/supabase-types';
+
+const props = defineProps<Database['public']['Tables']['Maison']['Row']>();
+
+
+
+const quartier = ref<Database['public']['Tables']['Quartier']['Row'] | null>(null);
+
+// Fonction pour récupérer les données de la Quartier correspondant à l'idQuartier de la table Quartier
+async function fetchQuartier() {
+    const { data, error } = await supabase
+        .from<Database['public']['Tables']['Quartier']['Row']>('Quartier')
+        .select('*')
+        .eq('id', props.idQuartier)
+        .single();
+
+    if (error) {
+        console.error('Erreur lors de la récupération de la Quartier:', error);
+    } else {
+        quartier.value = data;
+    }
+}
+
+fetchQuartier();
+
+
+
 </script>
 
 <template>
@@ -21,6 +48,7 @@ import { SchemaOffreMaison } from '@/types';
         <div class="px-5">
             
             <div class="py-2">{{adresse}}</div>
+            <p>Nom Quartier - {{ quartier?.nomQuartier }}</p>
             <hr/>
             <div class="w-full justify-between flex">
             <div class="flex py-4 gap-4"><Icon1/> {{nbrChambres}} beds</div>
