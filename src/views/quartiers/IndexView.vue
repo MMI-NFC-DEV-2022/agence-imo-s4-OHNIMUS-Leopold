@@ -22,7 +22,7 @@ if (error) console.log("n'a pas pu charger la table quartiercommune :", error);
       v=>v.nomCommune  )">
         {{ nomCommune }}
         <p class="ml-5" v-for="quartierObject in listeQuartiers">
-          {{ quartierObject.nomQuartier }}
+          <RouterLink :to="{ name:'quartiers-edit', params:{id:quartierObject.id} }">{{ quartierObject.nomQuartier }}</RouterLink>
         </p>
       </li>
     </ul>

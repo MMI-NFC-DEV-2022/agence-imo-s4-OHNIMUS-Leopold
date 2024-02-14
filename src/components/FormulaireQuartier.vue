@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { supabase } from '@/supabase';
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
-import { type Database } from '@/supabase-types'
+import { supabase } from '@/supabase';      
 const route = useRoute('/quartiers/edit/:id?')
 const router = useRouter()
 
